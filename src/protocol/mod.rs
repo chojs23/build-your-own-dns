@@ -51,11 +51,16 @@ impl Dns {
     pub fn response(&self) -> Vec<u8> {
         let mut bytes = Vec::new();
         let header = self.header.to_bytes();
+        println!("header: {:?}", header);
         bytes.extend_from_slice(&header);
+
+        println!("questions: {:?}", self.questions);
 
         for question in &self.questions {
             bytes.extend_from_slice(&question.to_bytes());
         }
+
+        println!("answers: {:?}", self.answers);
 
         for answer in &self.answers {
             bytes.extend_from_slice(&answer.to_bytes());

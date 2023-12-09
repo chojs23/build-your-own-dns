@@ -20,17 +20,13 @@ fn main() {
                 let answer: DnsAnswer =
                     DnsAnswer::new("codecrafters.io".to_string(), 1, 1, 60, 4, vec![8, 8, 8, 8]);
 
-                println!("Answer: {:?}", answer);
-
                 let mut response = Dns::new(id, true, 1, 1);
-
-                println!("Response: {:?}", response);
                 response.add_answer(answer);
 
-                println!("Response: {:?}", response);
+                let response_bytes = response.response();
 
                 udp_socket
-                    .send_to(&response.response(), source)
+                    .send_to(&response_bytes, source)
                     .expect("Failed to send response");
             }
             Err(e) => {
