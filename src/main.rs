@@ -23,6 +23,8 @@ fn main() {
                 println!("Answer: {:?}", answer);
 
                 let mut response = Dns::new(id, true, 1, 1);
+
+                println!("Response: {:?}", response);
                 response.add_answer(answer);
 
                 println!("Response: {:?}", response);
