@@ -38,12 +38,12 @@ impl Dns {
 
         let mut i = 12;
 
-        // if dns.header.qdcount > 0 {
-        //     i = dns.parse_questions(bytes, i);
-        // }
-        // if dns.header.ancount > 0 {
-        //     _ = dns.parse_answers(bytes, i);
-        // }
+        if dns.header.qdcount > 0 {
+            i = dns.parse_questions(bytes, i);
+        }
+        if dns.header.ancount > 0 {
+            _ = dns.parse_answers(bytes, i);
+        }
 
         dns
     }
@@ -53,13 +53,13 @@ impl Dns {
         let header = self.header.to_bytes();
         bytes.extend_from_slice(&header);
 
-        for question in &self.questions {
-            bytes.extend_from_slice(&question.to_bytes());
-        }
-
-        for answer in &self.answers {
-            bytes.extend_from_slice(&answer.to_bytes());
-        }
+        // for question in &self.questions {
+        //     bytes.extend_from_slice(&question.to_bytes());
+        // }
+        //
+        // for answer in &self.answers {
+        //     bytes.extend_from_slice(&answer.to_bytes());
+        // }
         bytes
     }
 

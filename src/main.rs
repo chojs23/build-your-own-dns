@@ -13,15 +13,15 @@ fn main() {
             Ok((size, source)) => {
                 let _received_data = String::from_utf8_lossy(&buf[0..size]);
                 println!("Received {} bytes from {}", size, source);
-                println!("Dns: {:?}", Dns::parse(&buf[0..size]));
-
-                let id = u16::from_be_bytes([buf[0], buf[1]]);
+                let dns = Dns::parse(&buf[0..size]);
 
                 let answer: DnsAnswer =
                     DnsAnswer::new("codecrafters.io".to_string(), 1, 1, 60, 4, vec![8, 8, 8, 8]);
 
-                let mut response = Dns::new(id, true, 1, 1);
+                let mut response = Dns::new(dns.header.id, true, dns.header.qdcount, 1);
                 response.add_answer(answer);
+
+                println!("Sending response: {:?}", response);
 
                 let response_bytes = response.response();
 
