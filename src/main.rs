@@ -16,7 +16,7 @@ fn main() {
                 let question = protocol::question::DNSQuestion::parse(&buf, 12, header.qdcount);
                 println!("Question: {:?}", question);
                 let mut response: Vec<u8> = Vec::new();
-                let response_header = protocol::header::DNSHeader::new(header.id, true, 0);
+                let response_header = protocol::header::DNSHeader::new(header.id, true, 1);
                 response.extend_from_slice(&response_header.to_bytes());
                 response.extend_from_slice(&question.0.to_bytes());
                 udp_socket
