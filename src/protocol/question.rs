@@ -11,7 +11,6 @@ impl DNSQuestion {
         let mut i = start;
         loop {
             let label_len = bytes[i] as usize;
-            println!("label_len: {}", label_len);
             if label_len == 0 {
                 break;
             }

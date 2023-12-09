@@ -1,12 +1,12 @@
 pub mod header;
 pub mod question;
 
-pub struct DNS {
+pub struct Dns {
     header: header::DNSHeader,
     questions: Vec<question::DNSQuestion>,
 }
 
-impl DNS {
+impl Dns {
     pub fn parse(bytes: &[u8]) -> Self {
         let header = header::DNSHeader::parse(bytes);
         let mut questions = Vec::new();
@@ -16,12 +16,13 @@ impl DNS {
             questions.push(question);
             start = next;
         }
-        DNS { header, questions }
+        Self { header, questions }
     }
 
     pub fn response(&self) -> Vec<u8> {
         let mut bytes = Vec::new();
-        bytes.extend_from_slice(&self.header.to_bytes());
+        let header = header::DNSHeader::new(self.header.id, true, self.header.qdcount).to_bytes();
+        bytes.extend_from_slice(&header);
         for question in &self.questions {
             bytes.extend_from_slice(&question.to_bytes());
         }
