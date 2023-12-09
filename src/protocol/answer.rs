@@ -25,6 +25,7 @@ pub struct DnsAnswer {
     pub rdata: Vec<u8>,
 }
 
+#[allow(dead_code)]
 impl DnsAnswer {
     pub fn new(
         name: String,
