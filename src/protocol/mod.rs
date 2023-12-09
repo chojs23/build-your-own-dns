@@ -59,7 +59,7 @@ impl Dns {
             bytes.extend_from_slice(&question.to_bytes());
         }
 
-        for question in &self.questions {
+        for _question in &self.questions {
             let answer: DnsAnswer =
                 DnsAnswer::new("codecrafters.io".to_string(), 1, 1, 60, 4, vec![8, 8, 8, 8]);
             bytes.extend_from_slice(&answer.to_bytes());

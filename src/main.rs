@@ -2,7 +2,7 @@ mod protocol;
 
 use std::net::UdpSocket;
 
-use crate::protocol::{answer::DnsAnswer, Dns};
+use crate::protocol::Dns;
 
 fn main() {
     let udp_socket = UdpSocket::bind("127.0.0.1:2053").expect("Failed to bind to address");
@@ -17,14 +17,12 @@ fn main() {
 
                 println!("Received request: {:?}", dns);
 
-                let response = Dns::new(dns.header.id, true, dns.header.qdcount, 1);
+                let response = dns.response();
 
                 println!("Sending response: {:?}", response);
 
-                let response_bytes = response.response();
-
                 udp_socket
-                    .send_to(&response_bytes, source)
+                    .send_to(&response, source)
                     .expect("Failed to send response");
             }
             Err(e) => {
