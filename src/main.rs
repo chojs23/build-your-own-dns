@@ -18,6 +18,8 @@ fn main() {
                 let answer: DnsAnswer =
                     DnsAnswer::new("codecrafters.io".to_string(), 1, 1, 60, 4, vec![8, 8, 8, 8]);
 
+                println!("Answer: {:?}", answer);
+
                 let mut response = Dns::new(Dns::parse(&buf[0..size]).header.id, true, 1, 1);
                 response.add_answer(answer);
 

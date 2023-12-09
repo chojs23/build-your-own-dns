@@ -2,7 +2,6 @@ pub mod answer;
 pub mod header;
 pub mod question;
 
-#[allow(dead_code)]
 #[derive(Debug)]
 pub struct Dns {
     pub header: header::DnsHeader,
@@ -14,11 +13,12 @@ impl Dns {
     pub fn new(id: u16, response: bool, qdcount: u16, ancount: u16) -> Self {
         Dns {
             header: header::DnsHeader::new(id, response, qdcount, ancount),
-            questions: Vec::new(),
-            answers: Vec::new(),
+            questions: Vec::with_capacity(qdcount as usize),
+            answers: Vec::with_capacity(ancount as usize),
         }
     }
 
+    #[allow(dead_code)]
     pub fn add_question(&mut self, question: question::DnsQuestion) {
         self.questions.push(question);
     }
