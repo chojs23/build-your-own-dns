@@ -1,3 +1,5 @@
+use self::answer::DnsAnswer;
+
 pub mod answer;
 pub mod header;
 pub mod question;
@@ -5,8 +7,8 @@ pub mod question;
 #[derive(Debug)]
 pub struct Dns {
     pub header: header::DnsHeader,
-    questions: Vec<question::DnsQuestion>,
-    answers: Vec<answer::DnsAnswer>,
+    pub questions: Vec<question::DnsQuestion>,
+    pub answers: Vec<answer::DnsAnswer>,
 }
 
 impl Dns {
@@ -56,9 +58,12 @@ impl Dns {
         for question in &self.questions {
             bytes.extend_from_slice(&question.to_bytes());
         }
-        // for answer in &self.answers {
-        //     bytes.extend_from_slice(&answer.to_bytes());
-        // }
+
+        for question in &self.questions {
+            let answer: DnsAnswer =
+                DnsAnswer::new("codecrafters.io".to_string(), 1, 1, 60, 4, vec![8, 8, 8, 8]);
+            bytes.extend_from_slice(&answer.to_bytes());
+        }
         bytes
     }
 

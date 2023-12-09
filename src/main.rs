@@ -15,11 +15,9 @@ fn main() {
                 println!("Received {} bytes from {}", size, source);
                 let dns = Dns::parse(&buf[0..size]);
 
-                let answer: DnsAnswer =
-                    DnsAnswer::new("codecrafters.io".to_string(), 1, 1, 60, 4, vec![8, 8, 8, 8]);
+                println!("Received request: {:?}", dns);
 
-                let mut response = Dns::new(dns.header.id, true, dns.header.qdcount, 1);
-                response.add_answer(answer);
+                let response = Dns::new(dns.header.id, true, dns.header.qdcount, 1);
 
                 println!("Sending response: {:?}", response);
 
