@@ -1,4 +1,4 @@
-mod dns_protocol;
+mod protocol;
 
 use std::net::UdpSocket;
 
@@ -11,8 +11,13 @@ fn main() {
             Ok((size, source)) => {
                 let _received_data = String::from_utf8_lossy(&buf[0..size]);
                 println!("Received {} bytes from {}", size, source);
-                let header = dns_protocol::DNSHeader::new(1234, true);
-                let response = header.to_bytes();
+                let header = protocol::header::DNSHeader::parse(&buf);
+                println!("Header: {:?}", header);
+                let question = protocol::question::DNSQuestion::parse(&buf, 12, header.qdcount);
+                println!("Question: {:?}", question);
+                let mut response: Vec<u8> = Vec::new();
+                response.extend_from_slice(&header.to_bytes());
+                response.extend_from_slice(&question.0.to_bytes());
                 udp_socket
                     .send_to(&response, source)
                     .expect("Failed to send response");
