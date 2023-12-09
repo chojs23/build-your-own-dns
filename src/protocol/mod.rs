@@ -2,6 +2,7 @@ pub mod answer;
 pub mod header;
 pub mod question;
 
+#[allow(dead_code)]
 #[derive(Debug)]
 pub struct Dns {
     pub header: header::DnsHeader,
@@ -28,6 +29,7 @@ impl Dns {
 
     pub fn parse(bytes: &[u8]) -> Self {
         let header = header::DnsHeader::parse(bytes);
+
         let mut dns = Dns {
             header,
             questions: Vec::new(),
@@ -35,22 +37,22 @@ impl Dns {
         };
 
         let mut i = 12;
-        i = dns.parse_questions(bytes, i);
-        _ = dns.parse_answers(bytes, i);
+
+        if dns.header.qdcount > 0 {
+            i = dns.parse_questions(bytes, i);
+        }
+        if dns.header.ancount > 0 {
+            _ = dns.parse_answers(bytes, i);
+        }
 
         dns
     }
 
     pub fn response(&self) -> Vec<u8> {
         let mut bytes = Vec::new();
-        let header = header::DnsHeader::new(
-            self.header.id,
-            true,
-            self.header.qdcount,
-            self.answers.len() as u16,
-        )
-        .to_bytes();
+        let header = self.header.to_bytes();
         bytes.extend_from_slice(&header);
+
         for question in &self.questions {
             bytes.extend_from_slice(&question.to_bytes());
         }
