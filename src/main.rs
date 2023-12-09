@@ -15,13 +15,17 @@ fn main() {
                 println!("Received {} bytes from {}", size, source);
                 println!("Dns: {:?}", Dns::parse(&buf[0..size]));
 
+                let id = u16::from_be_bytes([buf[0], buf[1]]);
+
                 let answer: DnsAnswer =
                     DnsAnswer::new("codecrafters.io".to_string(), 1, 1, 60, 4, vec![8, 8, 8, 8]);
 
                 println!("Answer: {:?}", answer);
 
-                let mut response = Dns::new(Dns::parse(&buf[0..size]).header.id, true, 1, 1);
+                let mut response = Dns::new(id, true, 1, 1);
                 response.add_answer(answer);
+
+                println!("Response: {:?}", response);
 
                 udp_socket
                     .send_to(&response.response(), source)

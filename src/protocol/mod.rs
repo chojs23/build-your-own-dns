@@ -53,9 +53,13 @@ impl Dns {
         let header = self.header.to_bytes();
         bytes.extend_from_slice(&header);
 
+        println!("Questions: {:?}", self.questions);
+
         for question in &self.questions {
             bytes.extend_from_slice(&question.to_bytes());
         }
+
+        println!("Answers: {:?}", self.answers);
         for answer in &self.answers {
             bytes.extend_from_slice(&answer.to_bytes());
         }
