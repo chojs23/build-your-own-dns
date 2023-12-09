@@ -31,7 +31,7 @@ impl Dns {
             self.header.id,
             true,
             self.header.qdcount,
-            self.header.ancount,
+            self.answers.len() as u16,
         )
         .to_bytes();
         bytes.extend_from_slice(&header);
