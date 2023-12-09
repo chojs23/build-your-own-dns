@@ -26,7 +26,14 @@ pub struct DnsAnswer {
 }
 
 impl DnsAnswer {
-    fn new(name: String, rtype: u16, class: u16, ttl: u32, rdlength: u16, rdata: Vec<u8>) -> Self {
+    pub fn new(
+        name: String,
+        rtype: u16,
+        class: u16,
+        ttl: u32,
+        rdlength: u16,
+        rdata: Vec<u8>,
+    ) -> Self {
         DnsAnswer {
             name,
             rtype,

@@ -4,12 +4,28 @@ pub mod question;
 
 #[derive(Debug)]
 pub struct Dns {
-    header: header::DnsHeader,
+    pub header: header::DnsHeader,
     questions: Vec<question::DnsQuestion>,
     answers: Vec<answer::DnsAnswer>,
 }
 
 impl Dns {
+    pub fn new(id: u16, response: bool, qdcount: u16, ancount: u16) -> Self {
+        Dns {
+            header: header::DnsHeader::new(id, response, qdcount, ancount),
+            questions: Vec::new(),
+            answers: Vec::new(),
+        }
+    }
+
+    pub fn add_question(&mut self, question: question::DnsQuestion) {
+        self.questions.push(question);
+    }
+
+    pub fn add_answer(&mut self, answer: answer::DnsAnswer) {
+        self.answers.push(answer);
+    }
+
     pub fn parse(bytes: &[u8]) -> Self {
         let header = header::DnsHeader::parse(bytes);
         let mut dns = Dns {
@@ -56,7 +72,7 @@ impl Dns {
 
     fn parse_answers(&mut self, bytes: &[u8], start: usize) -> usize {
         let mut i = start;
-        for _ in 0..self.header.ancount {
+        for _ in 0..1 {
             let (answer, next) = answer::DnsAnswer::parse(bytes, i, self.header.ancount);
             self.answers.push(answer);
             i = next;
