@@ -60,6 +60,7 @@ pub struct DnsHeader {
     pub arcount: u16,
 }
 
+#[allow(dead_code)]
 impl DnsHeader {
     pub fn new(id: u16, response: bool, qdcount: u16, ancount: u16) -> Self {
         DnsHeader {

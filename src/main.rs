@@ -15,11 +15,7 @@ fn main() {
                 println!("Received {} bytes from {}", size, source);
                 let dns = Dns::parse(&buf[0..size]);
 
-                println!("Received request: {:?}", dns);
-
                 let response = dns.response();
-
-                println!("Sending response: {:?}", response);
 
                 udp_socket
                     .send_to(&response, source)

@@ -1,4 +1,4 @@
-use self::answer::DnsAnswer;
+use self::{answer::DnsAnswer, header::DnsHeader};
 
 pub mod answer;
 pub mod header;
@@ -11,6 +11,7 @@ pub struct Dns {
     pub answers: Vec<answer::DnsAnswer>,
 }
 
+#[allow(dead_code)]
 impl Dns {
     pub fn new(id: u16, response: bool, qdcount: u16, ancount: u16) -> Self {
         Dns {
@@ -52,8 +53,15 @@ impl Dns {
 
     pub fn response(&self) -> Vec<u8> {
         let mut bytes = Vec::new();
-        let header = self.header.to_bytes();
-        bytes.extend_from_slice(&header);
+
+        let header = DnsHeader::new(
+            self.header.id,
+            true,
+            self.header.qdcount,
+            self.header.qdcount,
+        );
+
+        bytes.extend_from_slice(&header.to_bytes());
 
         for question in &self.questions {
             bytes.extend_from_slice(&question.to_bytes());
