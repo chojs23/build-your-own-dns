@@ -1,11 +1,25 @@
 #[derive(Debug)]
-pub struct DNSQuestion {
+pub struct DnsQuestion {
+    /// Name (QNAME) - variable length
+    /// The domain name that this question pertains to.
+    ///
+    /// Domain name encoding:
+    ///
+    /// Domain names in DNS packets are encoded as a sequence of labels.
+    ///
+    /// Labels are encoded as <length><content>, where <length> is a single byte that specifies the length of the label, and <content> is the actual content of the label. The sequence of labels is terminated by a null byte (\x00).
     pub qname: String,
+
+    /// Type (QTYPE) - 16 bits
+    /// The type of the question. For example, A, AAAA, NS, MX, etc.
     pub qtype: u16,
+
+    /// Class (QCLASS) - 16 bits
+    /// The class of the question.
     pub qclass: u16,
 }
 
-impl DNSQuestion {
+impl DnsQuestion {
     pub fn parse(bytes: &[u8], start: usize, qdcount: u16) -> (Self, usize) {
         let mut qname = String::new();
         let mut i = start;
@@ -29,7 +43,7 @@ impl DNSQuestion {
         i += 2;
         let qclass = u16::from_be_bytes([bytes[i], bytes[i + 1]]);
         i += 2;
-        let question = DNSQuestion {
+        let question = DnsQuestion {
             qname,
             qtype,
             qclass,
@@ -37,7 +51,7 @@ impl DNSQuestion {
         if qdcount == 1 {
             (question, i)
         } else {
-            let (next_question, next_i) = DNSQuestion::parse(bytes, i, qdcount - 1);
+            let (next_question, next_i) = DnsQuestion::parse(bytes, i, qdcount - 1);
             (next_question, next_i)
         }
     }
