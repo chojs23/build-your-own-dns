@@ -2,6 +2,7 @@ pub mod answer;
 pub mod header;
 pub mod question;
 
+#[derive(Debug)]
 pub struct Dns {
     header: header::DnsHeader,
     questions: Vec<question::DnsQuestion>,

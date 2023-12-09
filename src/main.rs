@@ -13,6 +13,7 @@ fn main() {
             Ok((size, source)) => {
                 let _received_data = String::from_utf8_lossy(&buf[0..size]);
                 println!("Received {} bytes from {}", size, source);
+                println!("Dns: {:?}", Dns::parse(&buf[0..size]));
                 let response: Vec<u8> = Dns::parse(&buf[0..size]).response();
                 udp_socket
                     .send_to(&response, source)
