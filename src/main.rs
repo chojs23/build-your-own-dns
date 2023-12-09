@@ -11,7 +11,7 @@ fn main() {
             Ok((size, source)) => {
                 let _received_data = String::from_utf8_lossy(&buf[0..size]);
                 println!("Received {} bytes from {}", size, source);
-                let header = dns_protocol::DNSHeader::new(0x1234, true);
+                let header = dns_protocol::DNSHeader::new(1234, true);
                 let response = header.to_bytes();
                 udp_socket
                     .send_to(&response, source)
